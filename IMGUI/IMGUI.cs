@@ -725,8 +725,8 @@ namespace Internal.IMGUI
                         }
                     case bool bool_val:
                         {
-                            if (updated = gui.Button(bool_val ? "ON" : "OFF"))
-                                output = !bool_val;
+                            updated = gui.CheckButton(bool_val, out bool_val);
+                            output = bool_val;
                             return updated;
                         }
                     case char char_val:
