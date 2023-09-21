@@ -1,10 +1,10 @@
 # Simple Godot IMGUI
-A fairly basic Immediate mode GUI similar to IMGUI for godot.
-The standard godot nodes are too much of a pain to use when you just want to mock up a basic ui, so I created this.
+A fairly basic Immediate mode GUI for godot similar to IMGUI.
+The standard godot nodes are too much of a pain when all you want is to mock up a basic ui, so I created this.
 I've tried to keep many of the function names similar to their node counterparts.
 
 ## Installation
-Just drop the IMGUI folder into your godot project. Requires Godot4.0 .Net.
+Just drop the IMGUI folder into your godot project. Requires Godot4.0 with .Net.
 
 ## Basic Usage
 ```C#
