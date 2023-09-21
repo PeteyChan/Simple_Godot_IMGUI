@@ -12,7 +12,7 @@ using Godot;
 
 public partial class Test : Node
 {
-    // Called when the node enters the scene tree for the first time.
+    enum Selection { A, B, C }
     public override void _Ready()
     {
         bool toggle = default;
@@ -33,7 +33,7 @@ public partial class Test : Node
         // OnProcess is just a way to update the window every frame
         // without having to override _Process()
         // makes it easy to write fire and forget guis
-        // for instance like you push a button
+        // for instance when you push a button
         window.OnProcess(() =>
         {
             // Draws a button, returns true when pressed
@@ -50,20 +50,12 @@ public partial class Test : Node
 
             // labels come with a couple other functions prefixed
             // with set that lets you change some of it's properties
-            window.Label("My Label").SetColor(Colors.Blue);
+            window.Label("My Label").SetColor(Colors.Cyan);
 
             // functions that modify values will follow more or less the
             // same pattern
             // - have both an input and output value
             // - returns true if the value was updated
-
-            // draws a check button
-            if (window.CheckButton(toggle, out toggle))
-            { }
-
-            // draws a check box
-            if (window.CheckBox(toggle, out toggle))
-            { }
 
             // draws the godot LineEdit
             if (window.TextEdit(some_text, out some_text))
@@ -75,7 +67,7 @@ public partial class Test : Node
 
             // draws the godot spin box
             if (window.SpinBox(some_value, out some_value))
-            {}
+            { }
 
             // will draw a vertical separator, has a horizontal counterpart
             window.VerticalSeparator();
@@ -83,29 +75,34 @@ public partial class Test : Node
             // draws a godot HBoxContainter which you can then add components to
             // there are various different container types but they all work basically the same
             window.HBox(out var hbox);
-            hbox.Button("button 1");
-            hbox.Button("button 2");
+
+            // draws a check button
+            if (hbox.CheckButton(toggle, out toggle))
+            { }
+
+            // draws a check box
+            if (hbox.CheckBox(toggle, out toggle))
+            { }
 
             // property will work on most data types
-            // only draws public fields
-            // classes can be tailored by implementing the IMGUI_PropertyDrawer interface
+            // only draws public fields with structs and classes
+            // output can be customized by implementing the IMGUI_PropertyDrawer interface on the class
             if (window.Property(tuple, out tuple))
             { }
 
             // draws the godot option button
-            // when pressed a dropdown menu will show supplied selections
+            // when pressed a dropdown menu will show all possible selections
             // when used with enums, will show all possible enums by default
             if (window.Option(selection, out selection))
-            {}
+            { }
 
             //  draws tabs
-            // current only impleneted with enums, the other tabs will all possible enums
+            // current only impleneted with enums, the other tabs will show all possible enums
             if (window.Tabs(selection, out selection))
-            {}
+            { }
         });
     }
-
-    enum Selection { A, B, C }
 }
 ```
+## Result
 ![image](https://github.com/PeteyChan/Simple_Godot_IMGUI/assets/21060636/5aa9796d-fe4a-4538-895d-5af914c44418)
