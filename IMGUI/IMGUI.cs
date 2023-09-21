@@ -99,7 +99,7 @@ public static class IMGUI_Extensions
 
     public static bool CheckBox(this IMGUI_Interface self, bool input, out bool output)
     {
-        return self.CheckButton(input, out output, default, default);
+        return self.CheckBox(input, out output, default, default);
     }
 
     public static bool CheckBox(this IMGUI_Interface self, bool input, out bool output, string on_text, string off_text)
