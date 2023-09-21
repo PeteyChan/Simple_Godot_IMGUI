@@ -86,7 +86,8 @@ public partial class Test : Node
 
             // property will work on most data types
             // only draws public fields with structs and classes
-            // output can be customized by implementing the IMGUI_PropertyDrawer interface on the class
+            // output can be customized by implementing the IMGUI_PropertyDrawer
+            // interface on the target class
             if (window.Property(tuple, out tuple))
             { }
 
