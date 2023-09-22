@@ -27,8 +27,9 @@ public static class IMGUI_Extensions
     {
         var label = self.GetGUIElement<IMGUI_Label>();
         label.label.Text = text;
-        label.element.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
-        label.element.Visible = false;
+        if (label.show_element)
+            label.show_element = false;
+        else label.element.Visible = false;
         return label;
     }
     public static IMGUI_Interface.Label Label(this IMGUI_Interface self, params object[] args)
@@ -296,7 +297,6 @@ namespace Internal.IMGUI
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
             SizeFlagsVertical = Control.SizeFlags.ExpandFill;
-            ClipContents = true;
             parent.AddChild(this);
         }
         Godot.Control element;
@@ -304,9 +304,9 @@ namespace Internal.IMGUI
         {
             if (element is T value && element.GetType() == typeof(T))
             {
+                element.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                element.SizeFlagsVertical = SizeFlags.ExpandFill;
                 Visible = true;
-                SizeFlagsHorizontal = element.SizeFlagsHorizontal;
-                SizeFlagsVertical = element.SizeFlagsVertical;
                 return value;
             }
             if (Node.IsInstanceValid(element))
@@ -561,9 +561,15 @@ namespace Internal.IMGUI
             element.SizeFlagsStretchRatio = 1;
         }
 
+        public bool show_element;
         public Label label;
         public GUI_Element element;
-        public T GetGUIElement<T>() where T : Godot.Control, new() => element.GetGUIElement<T>();
+        public T GetGUIElement<T>() where T : Godot.Control, new()
+        {
+            show_element = true;
+            return element.GetGUIElement<T>();
+        }
+
     }
 
     partial class IMGUI_ColorPicker : ColorPickerButton
