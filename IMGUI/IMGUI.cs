@@ -28,6 +28,7 @@ public static class IMGUI_Extensions
         var label = self.GetGUIElement<IMGUI_Label>();
         label.label.Text = text;
         label.element.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
+        label.element.Visible = false;
         return label;
     }
     public static IMGUI_Interface.Label Label(this IMGUI_Interface self, params object[] args)
