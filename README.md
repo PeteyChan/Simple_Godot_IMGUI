@@ -4,7 +4,7 @@ The standard godot nodes are too much of a pain when all you want is to mock up 
 I've tried to keep many of the function names similar to their node counterparts.
 
 ## Installation
-Just drop the IMGUI folder into your godot project. Requires Godot4.0 with .Net.
+Just drop the IMGUI folder into your godot project. Requires Godot4 with .Net.
 
 ## Basic Usage
 ```C#
