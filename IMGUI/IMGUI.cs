@@ -27,6 +27,7 @@ public static class IMGUI_Extensions
     {
         var label = self.GetGUIElement<IMGUI_Label>();
         label.label.Text = text;
+        label.label.Modulate = Colors.White;
         if (label.show_element)
             label.show_element = false;
         else label.element.Visible = false;
@@ -155,6 +156,7 @@ public static class IMGUI_Extensions
         grid = node;
     }
 
+    public static bool Property<PropertyType>(this IMGUI_Interface self, ref PropertyType property) => Property(self, property, out property);
     public static bool Property<PropertyType>(this IMGUI_Interface self, PropertyType input, out PropertyType output)
     {
         if (self.GetGUIElement<PropertyDrawer>().Update(input, out var new_value))
@@ -171,8 +173,7 @@ public static class IMGUI_Extensions
         output = input;
         var spin_box = self.GetGUIElement<IMGUI_Spinbox>();
         spin_box.TooltipText = tooltip;
-        var updated = spin_box.TryUpdate(input, out var float_output, step);
-        output = output < min ? min : output > max ? max : output;
+        var updated = spin_box.TryUpdate(input, out var float_output, step, min, max);
         if (updated) output = (int)float_output;
         return updated;
     }
@@ -182,8 +183,7 @@ public static class IMGUI_Extensions
         output = input;
         var spin_box = self.GetGUIElement<IMGUI_Spinbox>();
         spin_box.TooltipText = tooltip;
-        var updated = spin_box.TryUpdate(input, out var float_output, step);
-        output = output < min ? min : output > max ? max : output;
+        var updated = spin_box.TryUpdate(input, out var float_output, step, min, max);
         if (updated) output = (float)float_output;
         return updated;
     }
@@ -193,8 +193,7 @@ public static class IMGUI_Extensions
         output = input;
         var spin_box = self.GetGUIElement<IMGUI_Spinbox>();
         spin_box.TooltipText = tooltip;
-        var updated = spin_box.TryUpdate(input, out output, step);
-        output = output < min ? min : output > max ? max : output;
+        var updated = spin_box.TryUpdate(input, out output, step, min, max);
         return updated;
     }
 
@@ -297,6 +296,7 @@ namespace Internal.IMGUI
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
             SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+            ClipContents = true;
             parent.AddChild(this);
         }
         Godot.Control element;
@@ -454,9 +454,12 @@ namespace Internal.IMGUI
         double? new_value;
         bool init = true;
 
-        public bool TryUpdate(double input, out double output, double step)
+        public bool TryUpdate(double input, out double output, double step, double min, double max)
         {
             Step = step;
+            MinValue = min;
+            MaxValue = max;
+
             if (init)
             {
                 init = false;
@@ -467,7 +470,7 @@ namespace Internal.IMGUI
 
             if (new_value.HasValue)
             {
-                output = new_value.Value;
+                Value = output = new_value.Value;
                 new_value = default;
                 return true;
             }
@@ -551,10 +554,11 @@ namespace Internal.IMGUI
             label = new Label
             {
                 SizeFlagsHorizontal = SizeFlags.ExpandFill,
-                SizeFlagsVertical = SizeFlags.ShrinkBegin,
-                VerticalAlignment = VerticalAlignment.Center,
+                SizeFlagsVertical = SizeFlags.ExpandFill,
+                VerticalAlignment = VerticalAlignment.Top,
                 SizeFlagsStretchRatio = .5f,
-                ClipText = true,
+                //ClipText = true,
+                AutowrapMode = TextServer.AutowrapMode.Word,
             };
             this.AddChild(label);
             element = new GUI_Element(this);
@@ -816,6 +820,19 @@ namespace Internal.IMGUI
                             updated = gui.TextEdit(str_val, out var new_value);
                             output = new_value;
                             return updated;
+                        }
+                    case System.Guid guid_val:
+                        {
+                            updated = gui.TextEdit(guid_val.ToString(), out var new_value);
+                            if (updated)
+                            {
+                                if (System.Guid.TryParse(new_value, out var new_guid))
+                                {
+                                    output = new_guid;
+                                    return true;
+                                }
+                            }
+                            return false;
                         }
                     case System.Enum:
                         {
