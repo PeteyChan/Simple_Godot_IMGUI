@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Internal.IMGUI;
 
+[Godot.Tool]
 public sealed partial class IMGUI_GridContainer : Godot.GridContainer, IMGUI_Interface
 {
     public IMGUI_GridContainer()
@@ -30,7 +31,7 @@ public sealed partial class IMGUI_GridContainer : Godot.GridContainer, IMGUI_Int
     T IMGUI_Interface.GetGUIElement<T>()
     {
         if (element_count == elements.Count)
-            elements.Add(new GUI_Element(this));
+            elements.Add(new GUI_Element().SetParent(this));
         element_count++;
         return elements[element_count - 1].GetGUIElement<T>();
     }

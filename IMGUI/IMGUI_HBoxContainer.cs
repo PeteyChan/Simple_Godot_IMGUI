@@ -2,6 +2,7 @@ using Godot;
 using Internal.IMGUI;
 using System.Collections.Generic;
 
+[Tool, GlobalClass]
 public sealed partial class IMGUI_HBoxContainer : HBoxContainer, IMGUI_Interface
 {
     public IMGUI_HBoxContainer()
@@ -31,7 +32,7 @@ public sealed partial class IMGUI_HBoxContainer : HBoxContainer, IMGUI_Interface
     T IMGUI_Interface.GetGUIElement<T>()
     {
         if (element_count == elements.Count)
-            elements.Add(new GUI_Element(this));
+            elements.Add(new GUI_Element().SetParent(this));
         element_count++;
         return elements[element_count - 1].GetGUIElement<T>();
     }
