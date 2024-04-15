@@ -11,7 +11,7 @@ Just drop the IMGUI folder into your godot project. Requires Godot4 with .Net.
 using Godot;
 public partial class Testing : Node
 {
-   enum Selection { A, B, C , ReallyLongName, AnotherLongName}
+   enum Selection { A, B, C }
    public override void _Ready()
    {
       bool toggle = default;
